@@ -333,7 +333,7 @@ function LoginDialog({ open, onClose, client }: any) {
 
   if (!client) return null;
 
-  const sendMagic = async () => { const { error } = await client.auth.signInWithOtp({ email, options: { emailRedirectTo: window.location.origin } }); if (error) alert(error.message); else alert('Link enviado!'); };
+  const sendMagic = async () => { const { error } = await client.auth.signInWithOtp({ email, options: { emailRedirectTo: 'https://isaaceullen.github.io/controle-financeiro/' } }); if (error) alert(error.message); else alert('Link enviado!'); };
   const sendOtp = async () => { const { error } = await client.auth.signInWithOtp({ email, options: { shouldCreateUser: true } }); if (error) alert(error.message); else alert('Código enviado!'); };
   const verifyOtp = async () => { const { error } = await client.auth.verifyOtp({ email, token: code, type: 'email' }); if (error) alert(error.message); else onClose(); };
 
