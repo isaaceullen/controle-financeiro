@@ -20,7 +20,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Zap,
-  List
+  List,
+  Check
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as ReTooltip, Legend, LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts';
 
@@ -215,7 +216,7 @@ export default function App() {
         setState(s => ({ ...s, cards, categories, incomes, expenses, installments }));
       } catch (e: any) {
         console.error(e);
-        alert('Erro ao carregar do Supabase: ' + e.message);
+        // alert('Erro ao carregar do Supabase: ' + e.message);
       }
     })();
   }, [client, user?.id, setState]);
@@ -313,13 +314,13 @@ export default function App() {
   const isParcelado = (e: any) => String(e.type || '').toLowerCase() === 'parcelado';
 
   return (
-    <div className="min-h-screen bg-dark-950 text-gray-200 font-sans selection:bg-brand-400 selection:text-black">
+    <div className="min-h-screen bg-dark-950 text-gray-200 font-sans selection:bg-brand-400 selection:text-black pb-20">
       {/* Navigation */}
-      <nav className="sticky top-0 z-40 w-full border-b border-dark-800 backdrop-blur-md bg-dark-950/80">
+      <nav className="sticky top-0 z-40 w-full border-b border-dark-800/60 backdrop-blur-xl bg-dark-950/70">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 bg-brand-400 rounded-xl flex items-center justify-center shadow-[0_0_15px_rgba(250,204,21,0.3)]">
+              <div className="w-9 h-9 bg-brand-400 rounded-lg flex items-center justify-center shadow-[0_0_15px_rgba(250,204,21,0.3)] transform rotate-3 hover:rotate-0 transition-transform">
                 <CreditCard className="text-black w-5 h-5" />
               </div>
               <span className="text-lg font-bold tracking-tight text-white">Controle de Gastos</span>
@@ -336,7 +337,7 @@ export default function App() {
                 <button
                   key={item.id}
                   onClick={() => setTab(item.id)}
-                  className={`px-4 py-2 rounded-lg text-sm font-bold tracking-wide flex items-center gap-2 transition-all ${
+                  className={`px-4 py-2 rounded-lg text-sm font-bold tracking-wide flex items-center gap-2 transition-all duration-300 ${
                     tab === item.id ? "bg-brand-400 text-black shadow-[0_0_15px_rgba(250,204,21,0.3)]" : "text-gray-400 hover:bg-dark-800 hover:text-white"
                   }`}
                 >
@@ -362,7 +363,7 @@ export default function App() {
               )}
             </div>
 
-            <button onClick={() => setMenuOpen(true)} className="md:hidden p-2 rounded-lg text-gray-400 hover:bg-dark-800 hover:text-white">
+            <button onClick={() => setMenuOpen(true)} className="md:hidden p-2 rounded-lg text-brand-400 hover:bg-dark-800 hover:text-white">
               <Menu className="w-6 h-6" />
             </button>
           </div>
@@ -371,24 +372,26 @@ export default function App() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {tab === "dashboard" && (
-          <Dashboard
-            state={state} selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} monthsOptions={monthsOptions}
-            baseDate={baseDate} onBaseDateChange={onBaseDateChange} installsInMonth={installsInMonth} incomesInMonth={incomesInMonth} leftover={leftover}
-            setCardMonthPaid={setCardMonthPaid} setInstallmentPaid={setInstallmentPaid}
-          />
-        )}
-        {tab === "incomes" && <Incomes state={state} addIncome={addIncome} updateIncome={updateIncome} deleteIncome={deleteIncome} />}
-        {tab === "expenses" && <Expenses state={state} addExpense={addExpense} deleteExpense={deleteExpense} getPer={getPer} getTotal={getTotal} isParcelado={isParcelado} setState={setState} client={client} user={user} />}
-        {tab === "cards" && <Cards state={state} addCard={addCard} removeCard={removeCard} />}
-        {tab === "categories" && <Categories state={state} addCategory={addCategory} removeCategory={removeCategory} />}
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          {tab === "dashboard" && (
+            <Dashboard
+              state={state} selectedMonth={selectedMonth} setSelectedMonth={setSelectedMonth} monthsOptions={monthsOptions}
+              baseDate={baseDate} onBaseDateChange={onBaseDateChange} installsInMonth={installsInMonth} incomesInMonth={incomesInMonth} leftover={leftover}
+              setCardMonthPaid={setCardMonthPaid} setInstallmentPaid={setInstallmentPaid}
+            />
+          )}
+          {tab === "incomes" && <Incomes state={state} addIncome={addIncome} updateIncome={updateIncome} deleteIncome={deleteIncome} />}
+          {tab === "expenses" && <Expenses state={state} addExpense={addExpense} deleteExpense={deleteExpense} getPer={getPer} getTotal={getTotal} isParcelado={isParcelado} setState={setState} client={client} user={user} />}
+          {tab === "cards" && <Cards state={state} addCard={addCard} removeCard={removeCard} />}
+          {tab === "categories" && <Categories state={state} addCategory={addCategory} removeCategory={removeCategory} />}
+        </div>
       </main>
 
       {/* Floating Action Button */}
       <button
         title="Adicionar gasto"
         onClick={() => setTab('expenses')}
-        className="fixed bottom-6 right-6 z-30 w-14 h-14 rounded-full bg-brand-400 hover:bg-brand-300 text-black shadow-[0_0_20px_rgba(250,204,21,0.5)] hover:scale-110 transition-all flex items-center justify-center"
+        className="fixed bottom-8 right-6 z-30 w-14 h-14 rounded-2xl bg-brand-400 hover:bg-brand-300 text-black shadow-[0_0_25px_rgba(250,204,21,0.5)] hover:scale-110 hover:rotate-90 transition-all duration-300 flex items-center justify-center"
       >
         <Plus className="w-8 h-8" />
       </button>
@@ -495,7 +498,7 @@ function Dashboard({ state, selectedMonth, setSelectedMonth, monthsOptions, base
             {filters.pay.card && (
               <div className="mt-3 pl-4 border-l-2 border-dark-700">
                 <span className="text-xs font-medium text-gray-500 block mb-2">Cartões específicos</span>
-                 <select multiple value={filters.cards} onChange={(e) => { const vals = Array.from(e.target.selectedOptions).map(o => o.value); setFilters(f => ({ ...f, cards: vals })); }} className="w-full p-2 rounded-lg border border-dark-700 bg-dark-800 text-white text-sm">
+                 <select multiple value={filters.cards} onChange={(e) => { const vals = Array.from(e.target.selectedOptions).map((o: any) => o.value); setFilters(f => ({ ...f, cards: vals })); }} className="w-full p-2 rounded-lg border border-dark-700 bg-dark-800 text-white text-sm">
                   {cards.length === 0 ? <option value="">—</option> : cards.map((c: any) => (<option key={c.id} value={String(c.id)}>{c.name}</option>))}
                 </select>
                  <button className="mt-2 text-xs text-brand-400 font-medium hover:underline" onClick={() => setFilters(f => ({ ...f, cards: [] }))}>Limpar seleção</button>
@@ -513,7 +516,7 @@ function Dashboard({ state, selectedMonth, setSelectedMonth, monthsOptions, base
             </div>
             <div>
               <h4 className="text-sm font-medium text-white mb-3">Categoria</h4>
-              <select multiple value={filters.categories} onChange={(e) => { const vals = Array.from(e.target.selectedOptions).map(o => o.value); setFilters(f => ({ ...f, categories: vals })); }} className="w-full p-2 rounded-lg border border-dark-700 bg-dark-800 text-white text-sm h-24">
+              <select multiple value={filters.categories} onChange={(e) => { const vals = Array.from(e.target.selectedOptions).map((o: any) => o.value); setFilters(f => ({ ...f, categories: vals })); }} className="w-full p-2 rounded-lg border border-dark-700 bg-dark-800 text-white text-sm h-24">
                 {state.categories.filter((c: any) => c.type === 'expense').map((c: any) => (<option key={c.id} value={String(c.id)}>{c.name}</option>))}
               </select>
               <div className="text-[10px] text-gray-500 mt-1">Segure Ctrl/Cmd para selecionar vários</div>
@@ -547,25 +550,25 @@ function Dashboard({ state, selectedMonth, setSelectedMonth, monthsOptions, base
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <FilterModal />
       <Section title="Resumo Financeiro"
         right={
           <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
-            <div className="flex items-center bg-dark-950 rounded-lg p-1 border border-dark-700">
-              <button onClick={() => { setSelectedMonth(prevMonthKey(selectedMonth)); setPage(1); }} className="p-1.5 hover:bg-dark-800 rounded-md transition-all"><ChevronLeft className="w-4 h-4 text-gray-400" /></button>
-              <select value={selectedMonth} onChange={(e) => { setSelectedMonth(e.target.value); setPage(1); }} className="bg-transparent border-none text-sm font-semibold text-white focus:ring-0 cursor-pointer py-1 px-2">
+            <div className="flex items-center bg-dark-850 rounded-xl p-1 border border-dark-700">
+              <button onClick={() => { setSelectedMonth(prevMonthKey(selectedMonth)); setPage(1); }} className="p-1.5 hover:bg-dark-700 rounded-lg transition-all"><ChevronLeft className="w-4 h-4 text-gray-400" /></button>
+              <select value={selectedMonth} onChange={(e) => { setSelectedMonth(e.target.value); setPage(1); }} className="bg-transparent border-none text-sm font-semibold text-white focus:ring-0 cursor-pointer py-1 px-2 outline-none">
                 {monthsOptions.map((m: string) => (<option key={m} className="bg-dark-900" value={m}>{m}</option>))}
               </select>
-              <button onClick={() => { setSelectedMonth(nextMonthKey(selectedMonth)); setPage(1); }} className="p-1.5 hover:bg-dark-800 rounded-md transition-all"><ChevronRight className="w-4 h-4 text-gray-400" /></button>
+              <button onClick={() => { setSelectedMonth(nextMonthKey(selectedMonth)); setPage(1); }} className="p-1.5 hover:bg-dark-700 rounded-lg transition-all"><ChevronRight className="w-4 h-4 text-gray-400" /></button>
             </div>
-            <div className="flex items-center gap-2 bg-dark-950 px-3 py-1.5 rounded-lg border border-dark-700">
-              <Calendar className="w-4 h-4 text-gray-500" />
-              <input type="date" value={baseDate} onChange={(e) => onBaseDateChange(e.target.value)} className="bg-transparent border-none text-sm text-gray-400 focus:ring-0 p-0 w-28" />
+            <div className="flex items-center gap-2 bg-dark-850 px-3 py-1.5 rounded-xl border border-dark-700">
+              <Calendar className="w-4 h-4 text-brand-400" />
+              <input type="date" value={baseDate} onChange={(e) => onBaseDateChange(e.target.value)} className="bg-transparent border-none text-sm text-gray-300 focus:ring-0 p-0 w-28 outline-none font-medium" />
             </div>
           </div>
         }>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <Stat label="Ganhos Totais" value={toMoney(incomesInMonth.total)} tone="ok" />
           <Stat label="Gastos Totais" value={toMoney(installsInMonth.total)} sub={installsInMonth.totalPaid ? `${toMoney(installsInMonth.totalPaid)} já pagos` : undefined} tone="bad" />
           <Stat label="Saldo Restante" value={toMoney(leftover)} tone={leftover >= 0 ? 'ok' : 'bad'} />
@@ -573,24 +576,24 @@ function Dashboard({ state, selectedMonth, setSelectedMonth, monthsOptions, base
       </Section>
 
       {cards.length > 0 && (
-        <Section title="Faturas de Cartão" className="bg-dark-800/40 border-dark-800">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <Section title="Faturas de Cartão" className="bg-dark-900 border-dark-800">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {cards.map((c: any) => {
               const items = (byCard.get(c.id) || []).filter((i: any) => (i.due_month || i.dueMonth) === selectedMonth);
               const total = items.reduce((s: number, i: any) => s + (i.paid ? 0 : Number(i.amount || 0)), 0);
               const allPaid = items.length > 0 && items.every((i: any) => i.paid);
               const disabled = items.length === 0;
               return (
-                <div key={c.id} className="bg-dark-900 rounded-xl border border-dark-800 p-5 shadow-lg hover:border-brand-400/50 transition-all relative overflow-hidden group">
-                  <div className="absolute top-0 right-0 p-2 opacity-5 group-hover:opacity-10 transition-opacity">
-                      <CreditCard className="w-16 h-16 text-white" />
+                <div key={c.id} className="bg-gradient-to-br from-dark-850 to-dark-900 rounded-2xl border border-dark-700 p-6 shadow-lg hover:border-brand-400/40 transition-all relative overflow-hidden group hover:-translate-y-1">
+                  <div className="absolute top-[-10px] right-[-10px] p-2 opacity-[0.03] group-hover:opacity-10 transition-opacity">
+                      <CreditCard className="w-24 h-24 text-white" />
                   </div>
-                  <div className="flex items-start justify-between mb-4 relative z-10">
-                    <div className="font-semibold text-white text-lg">{c.name}</div>
+                  <div className="flex items-start justify-between mb-6 relative z-10">
+                    <div className="font-bold text-white text-lg tracking-tight">{c.name}</div>
                     <Checkbox checked={allPaid} disabled={disabled || loadingCardId === c.id} onChange={async (v) => { setLoadingCardId(c.id); try { await setCardMonthPaid(c.id, selectedMonth, v); } finally { setLoadingCardId(null); } }} label="" />
                   </div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wider relative z-10">Aberto neste mês</div>
-                  <div className="text-2xl font-bold text-brand-400 mt-1 relative z-10">{disabled ? '—' : toMoney(total)}</div>
+                  <div className="text-[10px] font-bold text-gray-500 uppercase tracking-widest relative z-10 mb-1">Fatura Atual</div>
+                  <div className="text-2xl font-bold text-brand-400 relative z-10 truncate" title={toMoney(total)}>{disabled ? '—' : toMoney(total)}</div>
                    {loadingCardId === c.id && <div className="absolute inset-0 bg-dark-900/90 flex items-center justify-center z-20"><span className="text-xs font-bold animate-pulse text-brand-400">Atualizando...</span></div>}
                 </div>
               );
@@ -599,13 +602,13 @@ function Dashboard({ state, selectedMonth, setSelectedMonth, monthsOptions, base
         </Section>
       )}
 
-      <div className="grid lg:grid-cols-3 gap-6">
-         <div className="lg:col-span-2 space-y-6">
+      <div className="grid lg:grid-cols-3 gap-8">
+         <div className="lg:col-span-2 space-y-8">
              <Section title="Detalhamento de Gastos">
                 <div className="flex flex-col gap-4 mb-6">
                    <div className="flex gap-3">
-                      <div className="relative flex-1">
-                         <Search className="absolute left-3 top-3.5 w-5 h-5 text-gray-500" />
+                      <div className="relative flex-1 group">
+                         <Search className="absolute left-3 top-3.5 w-5 h-5 text-gray-500 group-focus-within:text-brand-400 transition-colors" />
                          <Input placeholder="Buscar gasto..." value={query} onChange={e => { setPage(1); setQuery(e.target.value); }} className="pl-10" />
                       </div>
                       <Button variant="secondary" onClick={() => setFiltersOpen(true)} className={hasFilters ? "border-brand-400/50 bg-brand-400/10 text-brand-400" : ""}>
@@ -617,27 +620,28 @@ function Dashboard({ state, selectedMonth, setSelectedMonth, monthsOptions, base
                 </div>
 
                 {installments.length === 0 ? (
-                   <div className="text-center py-12 text-gray-500 bg-dark-900/50 rounded-xl border border-dashed border-dark-800">
+                   <div className="text-center py-16 text-gray-500 bg-dark-850/50 rounded-2xl border border-dashed border-dark-700 flex flex-col items-center gap-3">
+                      <Search className="w-8 h-8 opacity-20" />
                       Nenhum gasto encontrado para este mês.
                    </div>
                 ) : (
                    <>
                       <div className="space-y-3">
                          {view.map((i: any) => (
-                            <div key={i.id} className="group bg-dark-900 rounded-xl border border-dark-800 p-4 hover:border-brand-400/50 hover:shadow-lg hover:bg-dark-850 transition-all">
+                            <div key={i.id} className="group bg-dark-850/40 rounded-xl border border-dark-800 p-4 hover:border-brand-400/40 hover:bg-dark-850 hover:shadow-lg transition-all">
                                <div className="flex items-start justify-between">
                                   <div>
-                                     <div className="font-semibold text-white group-hover:text-brand-400 transition-colors">{i.name}</div>
-                                     <div className="text-xs text-gray-400 mt-1 flex items-center gap-2">
-                                        <span className="bg-dark-950 px-2 py-0.5 rounded-full border border-dark-800">{labelCat(i.category_id || i.categoryId)}</span>
-                                        <span>•</span>
-                                        <span>{(i.payment_type || i.paymentType) === 'card' ? labelCard(i.card_id || i.cardId) : 'Dinheiro'}</span>
-                                        {Number(i.total) > 1 && <span className="text-brand-400 font-medium">• {i.n}/{i.total}</span>}
+                                     <div className="font-bold text-white group-hover:text-brand-400 transition-colors text-base">{i.name}</div>
+                                     <div className="text-xs text-gray-400 mt-2 flex flex-wrap items-center gap-2">
+                                        <span className="bg-dark-800 border border-dark-700 px-2 py-0.5 rounded-md text-gray-300 font-medium">{labelCat(i.category_id || i.categoryId)}</span>
+                                        <span className="text-dark-600">•</span>
+                                        <span className="flex items-center gap-1">{(i.payment_type || i.paymentType) === 'card' ? <CreditCard className="w-3 h-3"/> : 'Dinheiro'} {(i.payment_type || i.paymentType) === 'card' && labelCard(i.card_id || i.cardId)}</span>
+                                        {Number(i.total) > 1 && <span className="text-brand-400 font-bold bg-brand-900/20 px-1.5 rounded ml-1">{i.n}/{i.total}</span>}
                                      </div>
                                   </div>
                                   <div className="text-right">
-                                     <div className="font-bold text-white">{toMoney(i.amount)}</div>
-                                     <div className={`text-xs font-medium mt-1 ${i.paid ? "text-emerald-400" : "text-brand-400"}`}>
+                                     <div className="font-bold text-white text-lg">{toMoney(i.amount)}</div>
+                                     <div className={`text-xs font-bold mt-1 uppercase tracking-wide flex items-center justify-end gap-1 ${i.paid ? "text-emerald-400" : "text-orange-400"}`}>
                                         {i.paid ? "Pago" : "Pendente"}
                                      </div>
                                   </div>
@@ -645,29 +649,31 @@ function Dashboard({ state, selectedMonth, setSelectedMonth, monthsOptions, base
                             </div>
                          ))}
                       </div>
-                      <div className="flex items-center justify-between mt-6 pt-4 border-t border-dark-800">
-                         <Button variant="ghost" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}>Anterior</Button>
-                         <span className="text-sm text-gray-500 font-medium">Página {page} de {totalPages}</span>
-                         <Button variant="ghost" onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}>Próxima</Button>
+                      <div className="flex items-center justify-between mt-6 pt-4 border-t border-dark-800/60">
+                         <Button variant="ghost" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}><ChevronLeft className="w-4 h-4" /> Anterior</Button>
+                         <span className="text-xs uppercase font-bold tracking-widest text-dark-500">Página {page} de {totalPages}</span>
+                         <Button variant="ghost" onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}>Próxima <ChevronRight className="w-4 h-4" /></Button>
                       </div>
                    </>
                 )}
              </Section>
          </div>
 
-         <div className="space-y-6">
-            <Section title="Parcelas em Dinheiro">
+         <div className="space-y-8">
+            <Section title="A Pagar em Dinheiro">
                {cash.length === 0 ? (
-                  <div className="text-sm text-gray-500 italic">Nenhum pagamento em dinheiro pendente.</div>
+                  <div className="text-sm text-gray-500 italic text-center py-4">Tudo certo! Nenhum pagamento em dinheiro.</div>
                ) : (
-                  <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2 custom-scroll">
+                  <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1 custom-scroll">
                      {cash.map((i: any) => (
-                        <div key={i.id} className="flex items-center justify-between p-3 rounded-lg border border-dark-800 bg-dark-900 hover:bg-dark-850 transition-colors">
+                        <div key={i.id} className="flex items-center justify-between p-3 rounded-xl border border-dark-700 bg-dark-850 hover:bg-dark-800 transition-colors group">
                            <div className="text-sm">
                               <div className="font-medium text-white">{i.name}</div>
-                              <div className="text-gray-400 text-xs">{toMoney(i.amount)} • {i.n}/{i.total}</div>
+                              <div className="text-gray-400 text-xs mt-0.5">{toMoney(i.amount)} {Number(i.total) > 1 && <span className="text-brand-400">• {i.n}/{i.total}</span>}</div>
                            </div>
-                           <Checkbox checked={i.paid} onChange={(v) => setInstallmentPaid(i.id, v)} label={i.paid ? "Pago" : "Pagar"} />
+                           <button onClick={() => setInstallmentPaid(i.id, !i.paid)} className={`w-8 h-8 rounded-full flex items-center justify-center border transition-all ${i.paid ? "bg-emerald-500 border-emerald-500 text-black" : "border-dark-600 hover:border-brand-400 text-transparent hover:text-brand-400"}`}>
+                              <Check className="w-4 h-4" />
+                           </button>
                         </div>
                      ))}
                   </div>
@@ -714,11 +720,25 @@ function Reports({ state, selectedMonth }: any) {
      return Array.from(m.entries()).map(([name, value]) => ({ name, value })).sort((a: any, b: any) => b.value - a.value);
   }, [state.installments, selectedMonth, mode, state.cards, state.categories]);
 
-  const COLORS = ['#facc15', '#eab308', '#ca8a04', '#a16207', '#854d0e', '#713f12', '#422006', '#fef08a', '#fef9c3'];
+  // Updated Diverse Palette for better differentiation in charts
+  const COLORS = [
+    '#facc15', // Brand Yellow
+    '#22d3ee', // Cyan
+    '#f472b6', // Pink
+    '#a3e635', // Lime
+    '#fb923c', // Orange
+    '#818cf8', // Indigo
+    '#34d399', // Emerald
+    '#f87171', // Red
+    '#a78bfa', // Violet
+    '#e879f9', // Fuchsia
+    '#60a5fa', // Blue
+    '#fbbf24', // Amber
+  ];
 
   return (
     <Section title="Relatórios" right={
-      <Select value={mode} onChange={e => setMode(e.target.value)} className="w-full py-1.5 text-xs !border-dark-700">
+      <Select value={mode} onChange={e => setMode(e.target.value)} className="w-full py-1.5 text-xs !border-dark-700 !bg-dark-800 !h-9">
         <option value="category">Por categoria</option>
         <option value="payment">Por pagamento</option>
         <option value="month">Tendência (12 meses)</option>
@@ -728,21 +748,30 @@ function Reports({ state, selectedMonth }: any) {
          <ResponsiveContainer width="100%" height="100%">
             {mode === 'month' ? (
                <LineChart data={data}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#3f3f46" />
-                  <XAxis dataKey="name" fontSize={10} tickMargin={10} stroke="#a1a1aa" />
-                  <YAxis fontSize={10} stroke="#a1a1aa" tickFormatter={(v) => `R$${v}`} />
-                  <ReTooltip formatter={(val: number) => toMoney(val)} contentStyle={{backgroundColor: '#18181b', borderRadius: '12px', border: '1px solid #3f3f46', color: '#fff'}} itemStyle={{color: '#facc15'}} />
-                  <Line type="monotone" dataKey="value" stroke="#facc15" strokeWidth={3} dot={{fill: '#facc15', r: 4}} activeDot={{r: 6}} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
+                  <XAxis dataKey="name" fontSize={10} tickMargin={10} stroke="#52525b" axisLine={false} tickLine={false} />
+                  <YAxis fontSize={10} stroke="#52525b" tickFormatter={(v) => `R$${v}`} axisLine={false} tickLine={false} />
+                  <ReTooltip 
+                    formatter={(val: number) => toMoney(val)} 
+                    contentStyle={{backgroundColor: '#18181b', borderRadius: '12px', border: '1px solid #27272a', color: '#fff', boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5)'}} 
+                    itemStyle={{color: '#facc15', fontWeight: 'bold'}} 
+                    cursor={{stroke: '#52525b', strokeWidth: 1}}
+                  />
+                  <Line type="monotone" dataKey="value" stroke="#facc15" strokeWidth={3} dot={{fill: '#000', stroke: '#facc15', strokeWidth: 2, r: 4}} activeDot={{r: 6, fill: '#facc15'}} />
                </LineChart>
             ) : (
                <PieChart>
-                  <Pie data={data} innerRadius={60} outerRadius={80} paddingAngle={2} dataKey="value" stroke="none">
+                  <Pie data={data} innerRadius={60} outerRadius={80} paddingAngle={4} dataKey="value" stroke="none">
                      {data.map((entry: any, index: number) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                      ))}
                   </Pie>
-                  <ReTooltip formatter={(val: number) => toMoney(val)} contentStyle={{backgroundColor: '#18181b', borderRadius: '12px', border: '1px solid #3f3f46', color: '#fff'}} itemStyle={{color: '#fff'}} />
-                  <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{fontSize: '12px', color: '#d4d4d8'}} />
+                  <ReTooltip 
+                    formatter={(val: number) => toMoney(val)} 
+                    contentStyle={{backgroundColor: '#18181b', borderRadius: '12px', border: '1px solid #27272a', color: '#fff', boxShadow: '0 10px 30px -10px rgba(0,0,0,0.5)'}} 
+                    itemStyle={{color: '#fff'}} 
+                  />
+                  <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{fontSize: '11px', color: '#a1a1aa', paddingTop: '10px'}} />
                </PieChart>
             )}
          </ResponsiveContainer>
@@ -936,34 +965,37 @@ function Expenses({ state, addExpense, deleteExpense, getPer, getTotal, isParcel
   return (
     <div className="grid gap-8">
       <Section title="Novo Gasto" right={
-         <div className="bg-dark-950 p-1 rounded-lg border border-dark-700 flex">
+         <div className="bg-dark-850 p-1 rounded-xl border border-dark-700 flex">
             <button 
                onClick={() => setAddMode('quick')} 
-               className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wide transition-all ${addMode === 'quick' ? 'bg-brand-400 text-black shadow-sm' : 'text-gray-400 hover:text-white'}`}>
+               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${addMode === 'quick' ? 'bg-brand-400 text-black shadow-md' : 'text-gray-400 hover:text-white'}`}>
                <Zap className="w-3 h-3" /> Rápido
             </button>
             <button 
                onClick={() => setAddMode('full')} 
-               className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-bold uppercase tracking-wide transition-all ${addMode === 'full' ? 'bg-brand-400 text-black shadow-sm' : 'text-gray-400 hover:text-white'}`}>
+               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${addMode === 'full' ? 'bg-brand-400 text-black shadow-md' : 'text-gray-400 hover:text-white'}`}>
                <List className="w-3 h-3" /> Completo
             </button>
          </div>
       }>
-         <div className="max-w-xl mx-auto">
+         <div className="max-w-2xl mx-auto pt-2">
             {addMode === 'quick' ? (
-               <div className="space-y-5 animate-in fade-in slide-in-from-left-4 duration-300">
+               <div className="space-y-6 animate-in fade-in slide-in-from-left-4 duration-300">
                   <Field label="Nome do Gasto">
                      <Input value={quickForm.name} onChange={e => setQuickForm({...quickForm, name: e.target.value})} placeholder="Ex.: Padaria" autoFocus />
                   </Field>
                   <Field label="Valor (À vista)">
-                     <Input type="number" step="0.01" className="text-lg font-bold text-brand-400" placeholder="0,00" value={quickForm.amount} onChange={e => setQuickForm({...quickForm, amount: e.target.value})} />
+                     <div className="relative">
+                        <span className="absolute left-4 top-4 text-brand-400 font-bold">R$</span>
+                        <Input type="number" step="0.01" className="pl-12 text-xl font-bold text-brand-400" placeholder="0,00" value={quickForm.amount} onChange={e => setQuickForm({...quickForm, amount: e.target.value})} />
+                     </div>
                   </Field>
                   
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                      <Field label="Data da Compra">
                         <Input type="date" value={quickForm.purchaseDate} onChange={e => setQuickForm({...quickForm, purchaseDate: e.target.value})} />
                      </Field>
-                     <div className="grid grid-cols-2 gap-2">
+                     <div className="grid grid-cols-2 gap-3">
                         <Field label="Mês Início">
                            <Select value={quickForm.billingMonthNum} onChange={e => setQuickForm({...quickForm, billingTouched: true, billingMonthNum: e.target.value})}>
                               {Array.from({ length: 12 }, (_, i) => (<option key={i + 1} value={String(i + 1).padStart(2, '0')}>{String(i + 1).padStart(2, '0')}</option>))}
@@ -983,39 +1015,39 @@ function Expenses({ state, addExpense, deleteExpense, getPer, getTotal, isParcel
                      </Select>
                   </Field>
 
-                  <Button onClick={submitQuick} className="w-full mt-2">
-                     Adicionar Rapidamente
+                  <Button onClick={submitQuick} className="w-full mt-4 py-4 text-base">
+                     Adicionar Agora
                   </Button>
-                  <div className="text-xs text-center text-gray-500">
+                  <div className="text-xs text-center text-dark-400">
                      * Para compras parceladas, pagamentos em dinheiro ou categorização, use o modo <strong>Completo</strong>.
                   </div>
                </div>
             ) : (
-               <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
+               <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
                    {/* Stepper UI */}
-                  <div className="flex items-center justify-center mb-6">
+                  <div className="flex items-center justify-center mb-8">
                      {[1, 2, 3].map(s => (
                         <div key={s} className="flex items-center">
-                           <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors border-2 ${step >= s ? "bg-brand-400 border-brand-400 text-black shadow-[0_0_10px_rgba(250,204,21,0.4)]" : "bg-dark-900 border-dark-700 text-gray-500"}`}>
+                           <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all border-2 ${step >= s ? "bg-brand-400 border-brand-400 text-black shadow-[0_0_15px_rgba(250,204,21,0.4)] scale-110" : "bg-dark-850 border-dark-700 text-gray-500"}`}>
                               {s}
                            </div>
-                           {s < 3 && <div className={`w-12 h-0.5 transition-colors ${step > s ? "bg-brand-400" : "bg-dark-800"}`} />}
+                           {s < 3 && <div className={`w-16 h-0.5 transition-colors mx-2 ${step > s ? "bg-brand-400" : "bg-dark-800"}`} />}
                         </div>
                      ))}
                   </div>
 
                   {step === 1 && (
-                   <div className="space-y-5">
+                   <div className="space-y-6">
                      <Field label="Nome do gasto"><Input value={form.name} onChange={e => setForm({...form, name: e.target.value})} placeholder="Ex.: Compras do Mês" autoFocus /></Field>
-                     <div className="bg-dark-950 p-4 rounded-xl border border-dark-800">
-                       <Field label="Como prefere informar o valor?" className="mb-3">
-                          <div className="flex gap-4">
+                     <div className="bg-dark-850 p-6 rounded-2xl border border-dark-700">
+                       <Field label="Como prefere informar o valor?" className="mb-4">
+                          <div className="flex gap-6">
                              <Checkbox checked={!form.isPerInst} onChange={v => setForm({...form, isPerInst: !v})} label="Valor Total da Compra" />
                              <Checkbox checked={form.isPerInst} onChange={v => setForm({...form, isPerInst: v})} label="Valor da Parcela" />
                           </div>
                        </Field>
                        <Field label={form.isPerInst ? "Valor da Parcela (R$)" : "Valor Total (R$)"}>
-                          <Input type="number" step="0.01" className="text-lg font-bold text-brand-400" placeholder="0,00" value={form.isPerInst ? form.perInstallment : form.totalAmount} onChange={e => form.isPerInst ? setForm({...form, perInstallment: e.target.value}) : setForm({...form, totalAmount: e.target.value})} />
+                          <Input type="number" step="0.01" className="text-2xl font-bold text-brand-400 bg-dark-900 border-dark-800" placeholder="0,00" value={form.isPerInst ? form.perInstallment : form.totalAmount} onChange={e => form.isPerInst ? setForm({...form, perInstallment: e.target.value}) : setForm({...form, totalAmount: e.target.value})} />
                        </Field>
                      </div>
                      <Field label="Categoria">
@@ -1024,24 +1056,24 @@ function Expenses({ state, addExpense, deleteExpense, getPer, getTotal, isParcel
                          {state.categories.filter((c: any) => c.type === 'expense').map((c: any) => (<option key={c.id} value={c.id}>{c.name}</option>))}
                        </Select>
                      </Field>
-                     <div className="flex justify-end pt-2"><Button onClick={nextStep}>Continuar &rarr;</Button></div>
+                     <div className="flex justify-end pt-4"><Button onClick={nextStep}>Continuar &rarr;</Button></div>
                    </div>
                   )}
 
                   {step === 2 && (
-                   <div className="space-y-5">
+                   <div className="space-y-6">
                      <Field label="Data da Compra"><Input type="date" value={form.purchaseDate} onChange={e => setForm({...form, purchaseDate: e.target.value})} /></Field>
-                     <div className="grid grid-cols-2 gap-4">
+                     <div className="grid grid-cols-2 gap-6">
                        <Field label="Mês 1ª Fatura"><Select value={form.billingMonthNum} onChange={e => setForm({...form, billingTouched: true, billingMonthNum: e.target.value})}>{Array.from({ length: 12 }, (_, i) => (<option key={i + 1} value={String(i + 1).padStart(2, '0')}>{String(i + 1).padStart(2, '0')}</option>))}</Select></Field>
                        <Field label="Ano"><Select value={form.billingYear} onChange={e => setForm({...form, billingTouched: true, billingYear: e.target.value})}>{Array.from({ length: 5 }, (_, i) => String(parseYMD(form.purchaseDate).getFullYear() + i)).map(y => (<option key={y} value={y}>{y}</option>))}</Select></Field>
                      </div>
-                     <div className="flex justify-between pt-2"><Button variant="secondary" onClick={() => setStep(1)}>&larr; Voltar</Button><Button onClick={() => setStep(3)}>Continuar &rarr;</Button></div>
+                     <div className="flex justify-between pt-4"><Button variant="secondary" onClick={() => setStep(1)}>&larr; Voltar</Button><Button onClick={() => setStep(3)}>Continuar &rarr;</Button></div>
                    </div>
                   )}
 
                   {step === 3 && (
-                   <div className="space-y-5">
-                     <div className="grid grid-cols-2 gap-4">
+                   <div className="space-y-6">
+                     <div className="grid grid-cols-2 gap-6">
                         <Field label="Pagamento">
                            <Select value={form.payType} onChange={e => setForm({...form, payType: e.target.value})}>
                               <option value="card">Cartão de Crédito</option>
@@ -1058,10 +1090,10 @@ function Expenses({ state, addExpense, deleteExpense, getPer, getTotal, isParcel
                      
                      {form.type === 'parcelado' && (
                         <Field label="Quantidade de Parcelas">
-                           <div className="flex items-center gap-3">
-                              <Button variant="secondary" onClick={() => setForm(f => ({...f, months: Math.max(2, Number(f.months) - 1)}))}>-</Button>
-                              <div className="font-bold text-xl w-12 text-center text-white">{form.months}x</div>
-                              <Button variant="secondary" onClick={() => setForm(f => ({...f, months: Number(f.months) + 1}))}>+</Button>
+                           <div className="flex items-center gap-4 bg-dark-850 p-2 rounded-xl border border-dark-700 justify-center">
+                              <Button variant="secondary" className="w-12 h-12 !p-0 rounded-full" onClick={() => setForm(f => ({...f, months: Math.max(2, Number(f.months) - 1)}))}>-</Button>
+                              <div className="font-bold text-2xl w-16 text-center text-brand-400">{form.months}x</div>
+                              <Button variant="secondary" className="w-12 h-12 !p-0 rounded-full" onClick={() => setForm(f => ({...f, months: Number(f.months) + 1}))}>+</Button>
                            </div>
                         </Field>
                      )}
@@ -1074,15 +1106,17 @@ function Expenses({ state, addExpense, deleteExpense, getPer, getTotal, isParcel
                        </Field>
                      )}
                      
-                     <div className="bg-dark-950 rounded-xl p-4 text-sm text-gray-400 border border-dark-800 mt-2">
-                        <div className="font-semibold text-brand-400 mb-1 uppercase tracking-wide text-xs">Resumo do Lançamento</div>
-                        <div className="text-white text-lg font-bold">{form.name || 'Sem nome'}</div>
-                        <div>{form.isPerInst ? `Parcelas de ${toMoney(form.perInstallment)}` : `Total: ${toMoney(form.totalAmount)}`}</div>
-                        <div>{form.type === 'parcelado' ? `${form.months} parcelas` : 'Pagamento único'}</div>
-                        <div>Início: {form.billingMonthNum}/{form.billingYear}</div>
+                     <div className="bg-gradient-to-br from-dark-850 to-dark-900 rounded-xl p-5 text-sm text-gray-400 border border-dark-700 mt-4 shadow-lg">
+                        <div className="font-bold text-brand-400 mb-2 uppercase tracking-widest text-[10px]">Resumo do Lançamento</div>
+                        <div className="text-white text-xl font-bold mb-1">{form.name || 'Sem nome'}</div>
+                        <div className="flex justify-between items-center border-t border-dark-700 pt-2 mt-2">
+                           <span>{form.isPerInst ? `Parcelas de ${toMoney(form.perInstallment)}` : `Total: ${toMoney(form.totalAmount)}`}</span>
+                           <span className="text-white font-medium">{form.type === 'parcelado' ? `${form.months} parcelas` : 'Pagamento único'}</span>
+                        </div>
+                        <div className="text-xs mt-2 text-dark-400">Início da cobrança: {form.billingMonthNum}/{form.billingYear}</div>
                      </div>
 
-                     <div className="flex justify-between pt-2"><Button variant="secondary" onClick={() => setStep(2)}>&larr; Voltar</Button><Button onClick={submitFull}>Concluir Lançamento</Button></div>
+                     <div className="flex justify-between pt-4"><Button variant="secondary" onClick={() => setStep(2)}>&larr; Voltar</Button><Button onClick={submitFull}>Concluir Lançamento</Button></div>
                    </div>
                   )}
                </div>
@@ -1091,51 +1125,51 @@ function Expenses({ state, addExpense, deleteExpense, getPer, getTotal, isParcel
       </Section>
 
       <Section title="Histórico de Gastos" right={
-         <div className="relative w-full sm:w-64">
-            <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-500" />
+         <div className="relative w-full sm:w-72 group">
+            <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-500 group-focus-within:text-brand-400 transition-colors" />
             <input 
                type="text" 
                placeholder="Buscar no histórico..." 
                value={historyQuery}
                onChange={(e) => { setPage(1); setHistoryQuery(e.target.value); }}
-               className="w-full bg-dark-950 border border-dark-700 rounded-lg pl-9 pr-3 py-2 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-brand-400 transition-colors"
+               className="w-full bg-dark-850 border border-dark-700 rounded-lg pl-9 pr-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-brand-400 focus:ring-1 focus:ring-brand-400 transition-all"
             />
          </div>
       }>
-        {all.length === 0 ? <div className="text-center py-8 text-gray-500 italic">Nenhum gasto encontrado.</div> :
-          <div className="space-y-3">
+        {all.length === 0 ? <div className="text-center py-12 text-gray-500 italic border border-dashed border-dark-800 rounded-xl">Nenhum gasto encontrado.</div> :
+          <div className="space-y-4">
             {paged.map((e: any) => {
               const parcelado = isParcelado(e);
               const valor = parcelado ? getPer(e) : (e.totalAmount ?? e.total_amount ?? 0);
               return (
-                <div key={e.id} className="flex items-center justify-between bg-dark-900 border border-dark-800 rounded-xl p-4 hover:border-brand-400/50 transition-all hover:bg-dark-850 group">
-                  <div>
-                    <div className="font-bold text-white group-hover:text-brand-400 transition-colors">{e.name}</div>
-                    <div className="text-sm text-gray-400 flex gap-2 items-center mt-0.5">
-                       <span className="font-medium text-brand-400">{toMoney(valor)}</span>
-                       <span>•</span>
-                       <span>{parcelado ? `${e.months}x` : `À vista`}</span>
-                       <span>•</span>
-                       <span className="text-xs bg-dark-950 border border-dark-700 px-1.5 rounded text-gray-400">Início {e.startBillingMonth || e.start_billing_month}</span>
+                <div key={e.id} className="flex flex-col sm:flex-row sm:items-center justify-between bg-dark-850/50 border border-dark-800 rounded-2xl p-5 hover:border-brand-400/30 transition-all hover:bg-dark-850 group hover:shadow-md">
+                  <div className="mb-3 sm:mb-0">
+                    <div className="font-bold text-white group-hover:text-brand-400 transition-colors text-lg">{e.name}</div>
+                    <div className="text-sm text-gray-400 flex flex-wrap gap-3 items-center mt-1">
+                       <span className="font-bold text-white">{toMoney(valor)}</span>
+                       <span className="w-1 h-1 bg-dark-600 rounded-full"></span>
+                       <span className="bg-dark-800 px-2 py-0.5 rounded text-xs">{parcelado ? `${e.months}x` : `À vista`}</span>
+                       <span className="w-1 h-1 bg-dark-600 rounded-full"></span>
+                       <span className="text-xs text-dark-400">Início {e.startBillingMonth || e.start_billing_month}</span>
                     </div>
                   </div>
-                  <div className="relative">
-                    <button onClick={() => setActionExp(actionExp?.id === e.id ? null : e)} className="p-2 hover:bg-dark-800 rounded-lg text-gray-400">
+                  <div className="relative flex items-center justify-end gap-2">
+                    <button onClick={() => setActionExp(actionExp?.id === e.id ? null : e)} className="p-2 hover:bg-dark-700 rounded-lg text-gray-400 transition-colors">
                       <Settings className="w-5 h-5" />
                     </button>
                     {actionExp?.id === e.id && (
-                      <div className="absolute right-0 top-full mt-1 w-32 bg-dark-800 shadow-xl rounded-xl border border-dark-700 overflow-hidden z-20 py-1 animate-in fade-in zoom-in duration-200">
-                         <button onClick={onEdit} className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-dark-700 hover:text-white flex items-center gap-2"><Edit2 className="w-3 h-3"/> Editar</button>
-                         <button onClick={() => { deleteExpense(actionExp.id, 'all'); setActionExp(null); }} className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 flex items-center gap-2"><Trash2 className="w-3 h-3"/> Excluir</button>
+                      <div className="absolute right-0 top-full mt-2 w-40 bg-dark-800 shadow-2xl rounded-xl border border-dark-600 overflow-hidden z-20 py-1 animate-in fade-in zoom-in duration-200 origin-top-right">
+                         <button onClick={onEdit} className="w-full text-left px-4 py-3 text-sm text-gray-300 hover:bg-dark-700 hover:text-white flex items-center gap-2"><Edit2 className="w-3 h-3"/> Editar</button>
+                         <button onClick={() => { deleteExpense(actionExp.id, 'all'); setActionExp(null); }} className="w-full text-left px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 hover:text-red-300 flex items-center gap-2"><Trash2 className="w-3 h-3"/> Excluir</button>
                       </div>
                     )}
                   </div>
                 </div>
               );
             })}
-            <div className="flex items-center justify-between pt-4">
+            <div className="flex items-center justify-between pt-6 border-t border-dark-800/50">
                <Button variant="ghost" onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}>Anterior</Button>
-               <span className="text-sm text-gray-500">Página {page} de {totalPages}</span>
+               <span className="text-xs uppercase font-bold text-dark-500 tracking-widest">Página {page} de {totalPages}</span>
                <Button variant="ghost" onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}>Próxima</Button>
             </div>
           </div>}
@@ -1143,7 +1177,7 @@ function Expenses({ state, addExpense, deleteExpense, getPer, getTotal, isParcel
 
       {/* Edit Modal */}
       <Modal open={editOpen} onClose={() => setEditOpen(false)} title="Editar Gasto">
-         <div className="grid gap-4">
+         <div className="grid gap-5">
             <Field label="Nome"><Input value={editForm.name || ''} onChange={e => setEditForm({ ...editForm, name: e.target.value })} /></Field>
             <Field label="Categoria">
                <Select value={editForm.categoryId || ""} onChange={e => setEditForm({ ...editForm, categoryId: e.target.value || null })}>
@@ -1151,20 +1185,20 @@ function Expenses({ state, addExpense, deleteExpense, getPer, getTotal, isParcel
                   {state.categories.filter((c: any) => c.type === 'expense').map((c: any) => (<option key={c.id} value={c.id}>{c.name}</option>))}
                </Select>
             </Field>
-            <div className="bg-brand-900/10 p-4 rounded-lg border border-brand-500/30 text-brand-200">
-               <div className="font-bold text-xs uppercase tracking-wide mb-2 text-brand-400">Ajuste Financeiro</div>
-               <Field label="Tipo de valor" className="mb-2">
-                  <div className="flex gap-3 text-sm">
-                     <label className="flex items-center gap-2"><input type="radio" checked={!editForm.isPerInst} onChange={() => setEditForm({...editForm, isPerInst: false})} /> Valor Total</label>
-                     <label className="flex items-center gap-2"><input type="radio" checked={editForm.isPerInst} onChange={() => setEditForm({...editForm, isPerInst: true})} /> Valor da Parcela</label>
+            <div className="bg-brand-900/10 p-5 rounded-xl border border-brand-500/20 text-brand-200">
+               <div className="font-bold text-xs uppercase tracking-wide mb-3 text-brand-400 flex items-center gap-2"><Zap className="w-3 h-3"/> Ajuste Financeiro</div>
+               <Field label="Tipo de valor" className="mb-3">
+                  <div className="flex gap-4 text-sm">
+                     <label className="flex items-center gap-2 cursor-pointer"><input type="radio" checked={!editForm.isPerInst} onChange={() => setEditForm({...editForm, isPerInst: false})} className="accent-brand-400" /> Valor Total</label>
+                     <label className="flex items-center gap-2 cursor-pointer"><input type="radio" checked={editForm.isPerInst} onChange={() => setEditForm({...editForm, isPerInst: true})} className="accent-brand-400" /> Valor da Parcela</label>
                   </div>
                </Field>
                <Field label="Valor (R$)">
-                  <Input type="number" step="0.01" value={editForm.amount || ''} onChange={e => setEditForm({ ...editForm, amount: e.target.value })} />
+                  <Input type="number" step="0.01" value={editForm.amount || ''} onChange={e => setEditForm({ ...editForm, amount: e.target.value })} className="bg-dark-950 border-brand-500/30 text-brand-400 font-bold" />
                </Field>
-               <div className="text-xs mt-2 opacity-80">Atenção: Alterar este valor atualizará <strong>todas</strong> as parcelas deste gasto.</div>
+               <div className="text-[11px] mt-3 opacity-70 leading-tight">Atenção: Alterar este valor atualizará <strong>todas</strong> as parcelas deste gasto no banco de dados.</div>
             </div>
-            <div className="flex justify-end gap-2 pt-2">
+            <div className="flex justify-end gap-3 pt-4 border-t border-dark-800">
                <Button variant="secondary" onClick={() => setEditOpen(false)}>Cancelar</Button>
                <Button onClick={saveEdit}>Salvar Alterações</Button>
             </div>
@@ -1187,10 +1221,10 @@ function Incomes({ state, addIncome, updateIncome, deleteIncome }: any) {
     <div className="grid lg:grid-cols-3 gap-8">
       <div className="lg:col-span-1">
          <Section title="Novo Ganho">
-           <form ref={formRef} onSubmit={onSubmit} className="space-y-4">
+           <form ref={formRef} onSubmit={onSubmit} className="space-y-5">
              <Field label="Nome"><Input name="name" placeholder="Ex.: Salário" required /></Field>
              <Field label="Valor (R$)"><Input name="amount" type="number" step="0.01" min="0" placeholder="0,00" required /></Field>
-             <div className="grid grid-cols-2 gap-3">
+             <div className="grid grid-cols-2 gap-4">
                 <Field label="Meses"><Input name="months" type="number" min="1" defaultValue="1" /></Field>
                 <Field label="Início"><Input name="startDate" type="date" defaultValue={fmtDate(today())} /></Field>
              </div>
@@ -1206,8 +1240,8 @@ function Incomes({ state, addIncome, updateIncome, deleteIncome }: any) {
       </div>
       <div className="lg:col-span-2">
          <Section title="Ganhos Recentes">
-           {state.incomes.length === 0 ? <div className="text-gray-500 text-center py-8 italic">Nenhum ganho registrado.</div> :
-             <div className="grid sm:grid-cols-2 gap-4">
+           {state.incomes.length === 0 ? <div className="text-gray-500 text-center py-12 italic border border-dashed border-dark-800 rounded-xl">Nenhum ganho registrado.</div> :
+             <div className="grid sm:grid-cols-2 gap-5">
                 {state.incomes.map((g: any) => (<IncomeRow key={g.id} g={g} categories={state.categories} onSave={updateIncome} onDelete={deleteIncome} />))}
              </div>}
          </Section>
@@ -1223,31 +1257,35 @@ function IncomeRow({ g, categories, onSave, onDelete }: any) {
   
   if (!edit) {
     return (
-      <div className="p-4 rounded-xl border border-dark-800 bg-dark-900 shadow-md hover:border-brand-400/50 transition-all hover:-translate-y-1">
-         <div className="flex justify-between items-start mb-2">
-            <div className="font-bold text-white">{g.name}</div>
-            <div className="text-emerald-400 font-bold">{toMoney(g.amount)}</div>
+      <div className="p-5 rounded-2xl border border-dark-800 bg-dark-850 shadow-md hover:border-emerald-500/30 transition-all hover:-translate-y-1 group">
+         <div className="flex justify-between items-start mb-3">
+            <div className="font-bold text-white text-lg">{g.name}</div>
+            <div className="text-emerald-400 font-bold bg-emerald-950/30 px-2 py-1 rounded-lg border border-emerald-500/20">{toMoney(g.amount)}</div>
          </div>
-         <div className="text-xs text-gray-400 space-y-1 mb-4">
-            <div>{g.months} {g.months > 1 ? 'meses' : 'mês'} • Início {fmtDate(g.start_date || g.startDate)}</div>
-            <div className="inline-block bg-dark-950 border border-dark-800 px-2 py-0.5 rounded text-gray-300">{categories.find((c: any) => c.id === (g.categoryId || g.category_id))?.name || 'Geral'}</div>
+         <div className="text-xs text-gray-400 space-y-2 mb-5">
+            <div className="flex items-center gap-2">
+               <span className="bg-dark-900 border border-dark-700 px-2 py-0.5 rounded text-gray-300">{categories.find((c: any) => c.id === (g.categoryId || g.category_id))?.name || 'Geral'}</span>
+               <span className="text-dark-600">•</span>
+               <span>Início {fmtDate(g.start_date || g.startDate)}</span>
+            </div>
+            <div>Duração: {g.months} {g.months > 1 ? 'meses' : 'mês'}</div>
          </div>
-         <div className="flex gap-2 border-t border-dark-800 pt-3">
-            <Button variant="ghost" onClick={() => setEdit(true)} className="flex-1 text-xs py-1 h-8">Editar</Button>
-            <Button variant="ghost" onClick={() => onDelete(g.id)} className="flex-1 text-xs py-1 h-8 text-red-400 hover:text-red-300 hover:bg-red-500/10">Excluir</Button>
+         <div className="flex gap-3 border-t border-dark-800 pt-4 opacity-60 group-hover:opacity-100 transition-opacity">
+            <Button variant="ghost" onClick={() => setEdit(true)} className="flex-1 text-xs py-1 h-9">Editar</Button>
+            <Button variant="ghost" onClick={() => onDelete(g.id)} className="flex-1 text-xs py-1 h-9 text-red-400 hover:text-red-300 hover:bg-red-500/10">Excluir</Button>
          </div>
       </div>
     );
   }
   return (
-    <div className="p-4 rounded-xl border border-brand-400/50 bg-dark-900 shadow-lg relative z-10">
-      <div className="space-y-3">
+    <div className="p-5 rounded-2xl border border-brand-400/50 bg-dark-900 shadow-2xl relative z-10">
+      <div className="space-y-4">
          <Field label="Nome"><Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} /></Field>
-         <div className="grid grid-cols-2 gap-2">
+         <div className="grid grid-cols-2 gap-3">
             <Field label="Valor"><Input type="number" step="0.01" value={form.amount} onChange={(e) => setForm({ ...form, amount: Number(e.target.value) })} /></Field>
             <Field label="Meses"><Input type="number" min="1" value={form.months} onChange={(e) => setForm({ ...form, months: Number(e.target.value) })} /></Field>
          </div>
-         <div className="grid grid-cols-2 gap-2">
+         <div className="grid grid-cols-2 gap-3">
             <Field label="Data"><Input type="date" value={fmtDate(form.start_date || form.startDate)} onChange={(e) => setForm({ ...form, startDate: e.target.value })} /></Field>
             <Field label="Categoria">
                <Select value={form.categoryId || form.category_id || ""} onChange={(e) => setForm({ ...form, categoryId: e.target.value || null })}>
@@ -1256,7 +1294,7 @@ function IncomeRow({ g, categories, onSave, onDelete }: any) {
                </Select>
             </Field>
          </div>
-         <div className="flex gap-2 pt-2">
+         <div className="flex gap-3 pt-2">
             <Button onClick={() => { onSave(form); setEdit(false); }} className="flex-1">Salvar</Button>
             <Button variant="secondary" onClick={() => setEdit(false)} className="flex-1">Cancelar</Button>
          </div>
@@ -1268,25 +1306,25 @@ function IncomeRow({ g, categories, onSave, onDelete }: any) {
 function Cards({ state, addCard, removeCard }: any) {
   const [name, setName] = useState('');
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-8">
        <Section title="Gerenciar Cartões">
-          <div className="flex gap-3 mb-6">
-             <Input value={name} onChange={e => setName(e.target.value)} placeholder="Nome do Cartão (ex: Nubank, Visa)" className="flex-1" />
-             <Button onClick={() => { if (!name.trim()) return; addCard(name.trim()); setName(''); }}>Adicionar Cartão</Button>
+          <div className="flex flex-col sm:flex-row gap-4 mb-8 bg-dark-850 p-6 rounded-2xl border border-dark-800">
+             <Input value={name} onChange={e => setName(e.target.value)} placeholder="Nome do Cartão (ex: Nubank, Visa)" className="flex-1 text-lg" />
+             <Button onClick={() => { if (!name.trim()) return; addCard(name.trim()); setName(''); }} className="w-full sm:w-auto">Adicionar Cartão</Button>
           </div>
-          <div className="grid sm:grid-cols-2 gap-3">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
              {state.cards.map((c: any) => (
-                <div key={c.id} className="flex items-center justify-between p-4 border border-dark-800 rounded-xl bg-dark-900 shadow-sm hover:border-brand-400/30 transition-all">
-                   <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-brand-400/10 flex items-center justify-center text-brand-400 shadow-inner">
-                         <CreditCard className="w-5 h-5" />
+                <div key={c.id} className="flex items-center justify-between p-5 border border-dark-800 rounded-2xl bg-dark-900 shadow-lg hover:border-brand-400/40 transition-all hover:-translate-y-1 group">
+                   <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-full bg-brand-400/10 flex items-center justify-center text-brand-400 shadow-[0_0_15px_rgba(250,204,21,0.1)] group-hover:shadow-[0_0_20px_rgba(250,204,21,0.3)] transition-shadow">
+                         <CreditCard className="w-6 h-6" />
                       </div>
-                      <span className="font-bold text-white">{c.name}</span>
+                      <span className="font-bold text-white text-lg">{c.name}</span>
                    </div>
-                   <Button variant="ghost" onClick={() => removeCard(c.id)} className="text-red-500 hover:bg-red-500/10 hover:text-red-400"><Trash2 className="w-4 h-4" /></Button>
+                   <Button variant="ghost" onClick={() => removeCard(c.id)} className="text-dark-600 hover:bg-red-500/10 hover:text-red-400 transition-colors"><Trash2 className="w-5 h-5" /></Button>
                 </div>
              ))}
-             {state.cards.length === 0 && <div className="col-span-full text-center text-gray-500 py-4 italic">Nenhum cartão cadastrado.</div>}
+             {state.cards.length === 0 && <div className="col-span-full text-center text-gray-500 py-8 italic border border-dashed border-dark-800 rounded-xl">Nenhum cartão cadastrado.</div>}
           </div>
        </Section>
     </div>
@@ -1297,40 +1335,46 @@ function Categories({ state, addCategory, removeCategory }: any) {
   const [name, setName] = useState('');
   const [type, setType] = useState('expense');
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-5xl mx-auto space-y-8">
        <Section title="Gerenciar Categorias">
-          <div className="flex flex-col sm:flex-row gap-3 mb-8 bg-dark-900 p-4 rounded-xl border border-dark-800">
+          <div className="flex flex-col sm:flex-row gap-4 mb-8 bg-dark-850 p-6 rounded-2xl border border-dark-800 shadow-lg">
              <div className="flex-1">
-                <Input value={name} onChange={e => setName(e.target.value)} placeholder="Nome da Categoria" />
+                <Input value={name} onChange={e => setName(e.target.value)} placeholder="Nome da Categoria" className="text-lg" />
              </div>
-             <div className="w-full sm:w-40">
-                <Select value={type} onChange={e => setType(e.target.value)}>
+             <div className="w-full sm:w-48">
+                <Select value={type} onChange={e => setType(e.target.value)} className="h-[52px]">
                    <option value="expense">Gasto</option>
                    <option value="income">Ganho</option>
                 </Select>
              </div>
-             <Button onClick={() => { if (!name.trim()) return; addCategory(name.trim(), type); setName(''); }}>Adicionar</Button>
+             <Button onClick={() => { if (!name.trim()) return; addCategory(name.trim(), type); setName(''); }} className="w-full sm:w-auto">Adicionar</Button>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-10">
              <div>
-                <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 ml-1">Gastos</h3>
-                <div className="space-y-2">
+                <div className="flex items-center gap-2 mb-4 pb-2 border-b border-dark-800">
+                   <TrendingDown className="w-4 h-4 text-brand-400" />
+                   <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Gastos</h3>
+                </div>
+                <div className="space-y-3">
                    {state.categories.filter((c:any) => c.type === 'expense').map((c: any) => (
-                      <div key={c.id} className="flex items-center justify-between p-3 border border-dark-800 rounded-lg bg-dark-900 hover:border-brand-400/50 transition-colors group">
-                         <span className="text-gray-300 font-medium">{c.name}</span>
-                         <button onClick={() => removeCategory(c.id)} className="opacity-0 group-hover:opacity-100 p-1.5 text-gray-500 hover:text-red-400 transition-all"><Trash2 className="w-4 h-4" /></button>
+                      <div key={c.id} className="flex items-center justify-between p-4 border border-dark-800 rounded-xl bg-dark-900 hover:border-brand-400/40 transition-all group hover:shadow-md">
+                         <span className="text-gray-200 font-semibold">{c.name}</span>
+                         <button onClick={() => removeCategory(c.id)} className="opacity-0 group-hover:opacity-100 p-2 text-gray-600 hover:text-red-400 transition-all bg-dark-950 rounded-lg"><Trash2 className="w-4 h-4" /></button>
                       </div>
                    ))}
                 </div>
              </div>
              <div>
-                <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 ml-1">Ganhos</h3>
-                <div className="space-y-2">
+                <div className="flex items-center gap-2 mb-4 pb-2 border-b border-dark-800">
+                   <TrendingUp className="w-4 h-4 text-emerald-400" />
+                   <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">Ganhos</h3>
+                </div>
+                <div className="space-y-3">
                    {state.categories.filter((c:any) => c.type === 'income').map((c: any) => (
-                      <div key={c.id} className="flex items-center justify-between p-3 border border-dark-800 rounded-lg bg-dark-900 hover:border-emerald-400/50 transition-colors group">
-                         <span className="text-gray-300 font-medium">{c.name}</span>
-                         <button onClick={() => removeCategory(c.id)} className="opacity-0 group-hover:opacity-100 p-1.5 text-gray-500 hover:text-red-400 transition-all"><Trash2 className="w-4 h-4" /></button>
+                      <div key={c.id} className="flex items-center justify-between p-4 border border-dark-800 rounded-xl bg-dark-900 hover:border-emerald-500/40 transition-all group hover:shadow-md">
+                         <span className="text-gray-200 font-semibold">{c.name}</span>
+                         <button onClick={() => removeCategory(c.id)} className="opacity-0 group-hover:opacity-100 p-2 text-gray-600 hover:text-red-400 transition-all bg-dark-950 rounded-lg"><Trash2 className="w-4 h-4" /></button>
                       </div>
                    ))}
                 </div>
@@ -1344,11 +1388,11 @@ function Categories({ state, addCategory, removeCategory }: any) {
 function MobileMenu({ open, onClose, onNav, onExport, onConfig, onLogin, onLogout, user, ready }: any) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm" onClick={onClose}>
-      <div className="absolute right-0 top-0 bottom-0 w-64 bg-dark-900 border-l border-dark-800 shadow-2xl p-4 transform transition-transform duration-200 ease-out" onClick={e => e.stopPropagation()}>
-        <div className="flex items-center justify-between mb-6 pb-4 border-b border-dark-800">
-          <span className="font-bold text-lg text-white">Menu</span>
-          <button onClick={onClose}><X className="w-6 h-6 text-gray-500" /></button>
+    <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md animate-in fade-in duration-200" onClick={onClose}>
+      <div className="absolute right-0 top-0 bottom-0 w-72 bg-dark-900 border-l border-dark-700 shadow-2xl p-6 transform transition-transform duration-200 ease-out slide-in-from-right" onClick={e => e.stopPropagation()}>
+        <div className="flex items-center justify-between mb-8 pb-4 border-b border-dark-800">
+          <span className="font-bold text-xl text-white tracking-tight">Menu</span>
+          <button onClick={onClose} className="p-2 bg-dark-800 rounded-lg text-gray-400 hover:text-white"><X className="w-5 h-5" /></button>
         </div>
         <nav className="space-y-2">
           {[
@@ -1358,19 +1402,19 @@ function MobileMenu({ open, onClose, onNav, onExport, onConfig, onLogin, onLogou
             { id: 'cards', label: 'Pagamentos', icon: CreditCard },
             { id: 'categories', label: 'Categorias', icon: Tags }
           ].map(item => (
-            <button key={item.id} onClick={() => { onNav(item.id); onClose(); }} className="w-full flex items-center gap-3 px-4 py-3 text-left text-gray-300 hover:bg-brand-400/10 hover:text-brand-400 rounded-xl transition-colors font-medium">
+            <button key={item.id} onClick={() => { onNav(item.id); onClose(); }} className="w-full flex items-center gap-4 px-4 py-3.5 text-left text-gray-300 hover:bg-brand-400 hover:text-black rounded-xl transition-all font-bold">
               <item.icon className="w-5 h-5" />
               {item.label}
             </button>
           ))}
         </nav>
-        <div className="mt-6 pt-6 border-t border-dark-800 space-y-3">
-           <button onClick={() => { onExport(); onClose(); }} className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white"><FileJson className="w-4 h-4" /> Exportar Dados</button>
-           <button onClick={() => { onConfig(); onClose(); }} className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-400 hover:text-white"><Settings className="w-4 h-4" /> Configurar Supabase</button>
+        <div className="mt-8 pt-8 border-t border-dark-800 space-y-4">
+           <button onClick={() => { onExport(); onClose(); }} className="w-full flex items-center gap-4 px-4 py-3 text-sm font-medium text-gray-400 hover:text-white hover:bg-dark-800 rounded-xl transition-colors"><FileJson className="w-5 h-5" /> Exportar Dados</button>
+           <button onClick={() => { onConfig(); onClose(); }} className="w-full flex items-center gap-4 px-4 py-3 text-sm font-medium text-gray-400 hover:text-white hover:bg-dark-800 rounded-xl transition-colors"><Settings className="w-5 h-5" /> Configurar Supabase</button>
            {ready && user ? 
-              <button onClick={() => { onLogout(); onClose(); }} className="w-full flex items-center gap-3 px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg"><LogOut className="w-4 h-4" /> Sair</button> 
+              <button onClick={() => { onLogout(); onClose(); }} className="w-full flex items-center gap-4 px-4 py-3 text-sm font-medium text-red-400 hover:bg-red-500/10 rounded-xl transition-colors"><LogOut className="w-5 h-5" /> Sair</button> 
               : 
-              <button onClick={() => { onLogin(); onClose(); }} className="w-full bg-brand-400 text-black py-2.5 rounded-lg font-bold shadow-sm hover:bg-brand-300">Entrar</button>
+              <button onClick={() => { onLogin(); onClose(); }} className="w-full bg-brand-400 text-black py-3 rounded-xl font-bold shadow-lg hover:bg-brand-300 mt-4">Entrar</button>
            }
         </div>
       </div>
@@ -1399,13 +1443,13 @@ function ConfigDialog({ open, onClose }: any) {
 
   return (
     <Modal open={open} onClose={onClose} title="Configurar Supabase">
-       <div className="space-y-4">
-          <div className="text-sm text-blue-200 bg-blue-900/20 p-3 rounded-lg border border-blue-800">
+       <div className="space-y-5">
+          <div className="text-sm text-blue-200 bg-blue-900/20 p-4 rounded-xl border border-blue-800/50">
              Por padrão, o sistema usa a configuração interna. Use estes campos apenas se desejar conectar ao <strong>seu próprio</strong> projeto Supabase.
           </div>
           <Field label="Project URL"><Input value={url} onChange={e => setUrl(e.target.value)} placeholder="https://..." /></Field>
           <Field label="Anon Key"><Input value={anon} onChange={e => setAnon(e.target.value)} placeholder="ey..." /></Field>
-          <div className="flex justify-end gap-3 pt-2">
+          <div className="flex justify-end gap-3 pt-4 border-t border-dark-800">
              <Button variant="danger" onClick={clear}>Restaurar Padrão</Button>
              <Button onClick={save}>Salvar Conexão</Button>
           </div>
