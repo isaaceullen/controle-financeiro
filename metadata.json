@@ -1,0 +1,5 @@
+{
+  "name": "Camerite Marketing Dashboard",
+  "description": "An advanced dashboard for managing and visualizing marketing campaign data across different segments like Franchises, White Label, and Social Media. It provides detailed weekly and monthly views of KPIs, organic and paid traffic, sales pipeline, and performance charts.",
+  "requestFramePermissions": []
+}
