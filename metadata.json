@@ -1,5 +1,5 @@
 {
   "name": "Controle de Gastos",
-  "description": "A premium financial tracking application connected to Supabase.",
+  "description": "A robust, responsive expense tracker with Supabase integration, featuring income management, installment tracking, and visual reports.",
   "requestFramePermissions": []
 }

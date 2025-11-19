@@ -18,10 +18,10 @@ export interface Income {
   name: string;
   amount: number;
   months: number;
-  start_date?: string; // Supabase column
-  startDate?: string; // Local state fallback
-  category_id?: string | null;
+  startDate?: string;
+  start_date?: string;
   categoryId?: string | null;
+  category_id?: string | null;
   user_id?: string;
   created_at?: string;
 }
@@ -29,23 +29,23 @@ export interface Income {
 export interface Expense {
   id: string;
   name: string;
-  total_amount?: number;
   totalAmount?: number;
-  per_installment?: number;
+  total_amount?: number;
   perInstallment?: number;
-  is_per_installment_value?: boolean;
+  per_installment?: number;
   isPerInstallmentValue?: boolean;
-  category_id?: string | null;
+  is_per_installment_value?: boolean;
   categoryId?: string | null;
-  purchase_date?: string;
+  category_id?: string | null;
   purchaseDate?: string;
-  payment_type?: string;
+  purchase_date?: string;
   paymentType?: string;
-  card_id?: string | null;
+  payment_type?: string;
   cardId?: string | null;
-  start_billing_month?: string;
+  card_id?: string | null;
   startBillingMonth?: string;
-  type?: string; // 'single' | 'parcelado'
+  start_billing_month?: string;
+  type?: string;
   months?: number;
   user_id?: string;
   created_at?: string;
@@ -53,24 +53,24 @@ export interface Expense {
 
 export interface Installment {
   id: string;
-  expense_id?: string;
   expenseId?: string;
+  expense_id?: string;
   n: number;
   total: number;
   amount: number;
-  due_month?: string;
   dueMonth?: string;
+  due_month?: string;
   paid: boolean;
-  payment_type?: string;
   paymentType?: string;
-  card_id?: string | null;
+  payment_type?: string;
   cardId?: string | null;
-  name?: string;
-  category_id?: string | null;
+  card_id?: string | null;
+  name: string;
   categoryId?: string | null;
-  user_id?: string;
-  created_at?: string;
+  category_id?: string | null;
   createdAt?: string;
+  created_at?: string;
+  user_id?: string;
 }
 
 export interface AppState {
@@ -81,11 +81,11 @@ export interface AppState {
   installments: Installment[];
 }
 
-declare global {
-  interface Window {
-    supabase: any;
-    createSupabaseClient: any;
-    __setSupabaseClient: (url: string, anon: string) => void;
-    Chart: any;
-  }
+export interface FilterState {
+  pay: { cash: boolean; card: boolean };
+  cards: string[];
+  compra: { avista: boolean; aprazo: boolean };
+  categories: string[];
+  min: string;
+  max: string;
 }
