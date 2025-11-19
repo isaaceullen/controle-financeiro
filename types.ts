@@ -1,81 +1,91 @@
-
-export type WeeklyData = (number | string)[];
-
-export type Segment = 'Franquias' | 'White Label' | 'Redes Sociais';
-
-export interface LandingPageData {
-  leads: WeeklyData;
-  views: WeeklyData;
+export interface Card {
+  id: string;
+  name: string;
+  user_id?: string;
+  created_at?: string;
 }
 
-export interface OrganicData {
-  sources: { [key: string]: WeeklyData };
-  landing: { [key: string]: LandingPageData };
+export interface Category {
+  id: string;
+  name: string;
+  type: 'income' | 'expense';
+  user_id?: string;
+  created_at?: string;
 }
 
-export interface PaidChannelData {
-  investimento: WeeklyData;
-  alcance: WeeklyData;
-  impressoes: WeeklyData;
-  cliques: WeeklyData;
-  leadsPlan: WeeklyData;
-  leads: WeeklyData;
+export interface Income {
+  id: string;
+  name: string;
+  amount: number;
+  months: number;
+  start_date?: string; // Supabase column
+  startDate?: string; // Local state fallback
+  category_id?: string | null;
+  categoryId?: string | null;
+  user_id?: string;
+  created_at?: string;
 }
 
-export interface PaidData {
-  meta: PaidChannelData;
-  google: PaidChannelData;
+export interface Expense {
+  id: string;
+  name: string;
+  total_amount?: number;
+  totalAmount?: number;
+  per_installment?: number;
+  perInstallment?: number;
+  is_per_installment_value?: boolean;
+  isPerInstallmentValue?: boolean;
+  category_id?: string | null;
+  categoryId?: string | null;
+  purchase_date?: string;
+  purchaseDate?: string;
+  payment_type?: string;
+  paymentType?: string;
+  card_id?: string | null;
+  cardId?: string | null;
+  start_billing_month?: string;
+  startBillingMonth?: string;
+  type?: string; // 'single' | 'parcelado'
+  months?: number;
+  user_id?: string;
+  created_at?: string;
 }
 
-export interface PipeData {
-  leads: WeeklyData;
-  oportunidades: WeeklyData;
-  noShow: WeeklyData;
-  perdidos: WeeklyData;
-  vendas: WeeklyData;
-}
-
-export interface FWMonth {
-  weeks: number;
-  organic: OrganicData;
-  paid: PaidData;
-  pipe: PipeData;
-}
-
-export interface SocialNetworkData {
-  [metric: string]: WeeklyData;
-}
-
-export interface SocialMonth {
-  weeks: number;
-  metrics: string[];
-  networks: {
-    [network: string]: SocialNetworkData;
-  };
-}
-
-export type MonthlyData = FWMonth | SocialMonth;
-
-export interface YearData {
-  [year: number]: MonthlyData[];
-}
-
-export interface SegmentData {
-  'Franquias': YearData;
-  'White Label': YearData;
-  'Redes Sociais': YearData;
+export interface Installment {
+  id: string;
+  expense_id?: string;
+  expenseId?: string;
+  n: number;
+  total: number;
+  amount: number;
+  due_month?: string;
+  dueMonth?: string;
+  paid: boolean;
+  payment_type?: string;
+  paymentType?: string;
+  card_id?: string | null;
+  cardId?: string | null;
+  name?: string;
+  category_id?: string | null;
+  categoryId?: string | null;
+  user_id?: string;
+  created_at?: string;
+  createdAt?: string;
 }
 
 export interface AppState {
-  year: number;
-  month: number;
-  segment: Segment;
-  mode: 'weekly' | 'annual';
-  data: SegmentData;
+  cards: Card[];
+  categories: Category[];
+  incomes: Income[];
+  expenses: Expense[];
+  installments: Installment[];
 }
 
-export interface SupabaseConfig {
-  url: string;
-  key: string;
-  dashboardId: string;
+declare global {
+  interface Window {
+    supabase: any;
+    createSupabaseClient: any;
+    __setSupabaseClient: (url: string, anon: string) => void;
+    Chart: any;
+  }
 }
